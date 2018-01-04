@@ -2,11 +2,8 @@ package tests;
 
 import browser.DriverSingleton;
 import browser.Util;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -26,19 +23,14 @@ public class CourseTest {
     public void setUp() {
         driver = ds.driver;
         util = new Util();
+
         LoginPage loginPage = new LoginPage(driver);
         loginPage.goTo();
         loginPage.userLogin("sanit@fusemachines.com", "sanit123");
 
-        WebElement myDynamicElement;
-        try {
-            myDynamicElement = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.id("sidebar-trigger")));
-            System.out.println("Logged In successfully");
-            Assert.assertTrue(util.isPresent(myDynamicElement), "sidebar is visible only after successful login into the platform");
-        } catch (Exception e) {
-            System.out.println(e);
-        }2
+        //For Validation
+        WebElement elementToBePresent = util.myDyanamicWait(driver, "#sidebar-trigger", "Logged In Successfully");
+        Assert.assertTrue(util.isPresent(elementToBePresent));
     }
 
     @Test
@@ -46,15 +38,8 @@ public class CourseTest {
         CoursePage coursePage = new CoursePage(driver);
         coursePage.goTo();
         coursePage.searchCourse("Intro to AI");
-
-        WebElement myDynamicElement;
-        try {
-            myDynamicElement = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".course-block")));
-            System.out.println("Course Found");
-            Assert.assertTrue(util.isPresent(myDynamicElement), myDynamicElement.getText());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        //For Validation
+        WebElement elementToBePresent = util.myDyanamicWait(driver, ".course-block", "Course Found");
+        Assert.assertTrue(util.isPresent(elementToBePresent));
     }
 }

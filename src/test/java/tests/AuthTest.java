@@ -2,11 +2,8 @@ package tests;
 
 import browser.DriverSingleton;
 import browser.Util;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -34,15 +31,10 @@ public class AuthTest {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.goTo();
         loginPage.userLogin("sanit@fusemachines.com", "sanit123");
-        WebElement myDynamicElement;
-        try {
-            myDynamicElement = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.id("sidebar-trigger")));
-            System.out.println("Logged In successfully");
-            Assert.assertTrue(util.isPresent(myDynamicElement), "sidebar is visible only after successful login into the platform");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+
+        //For Validation
+        WebElement elementToBePresent = util.myDyanamicWait(driver, "#sidebar-trigger", "Logged In Successfully");
+        Assert.assertTrue(util.isPresent(elementToBePresent));
     }
 
     @Test
@@ -50,20 +42,19 @@ public class AuthTest {
         LoginPage loginPage = new LoginPage(driver);
         loginPage.goTo();
         loginPage.userLogin("sanit@fusemachines.com", "wrongpassword");
-        WebElement myDynamicElement;
-        try {
-            myDynamicElement = (new WebDriverWait(driver, 10))
-                    .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#home > div.alert.alert-danger.alert-dismissible")));
-            System.out.println("Logged In Failed");
-            Assert.assertTrue(util.isPresent(myDynamicElement), myDynamicElement.getText());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+
+        //For Validation
+        WebElement elementToBePresent = util.myDyanamicWait(
+                driver,
+                "#home > div.alert.alert-danger.alert-dismissible",
+                "Logged In Failed"
+        );
+        Assert.assertTrue(util.isPresent(elementToBePresent));
     }
 
     @AfterMethod
     public void TearDown() {
-//        driver.quit();
-//        ds.deleteInstance();
+        driver.quit();
+        ds.deleteInstance();
     }
 }
